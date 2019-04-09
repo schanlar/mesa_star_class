@@ -21,7 +21,7 @@ paths = ['/Users/SavvasGCh/Documents/GitHub/mesa_star_class/Data/2p6M/LOGS',
         '/Users/SavvasGCh/Documents/GitHub/mesa_star_class/Data/7p0M/LOGS']
 
 # Set the names of these models.
-# In this example, the values for metallicity and overshooting where chosen arbitrary
+# In this example, the values for metallicity and overshooting were chosen arbitrarily
 
 names = ['2.6000_0.0001_0.0160', '5.0000_0.0010_0.0140', '7.0000_0.0200_0.0000']
 
