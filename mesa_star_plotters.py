@@ -1,9 +1,9 @@
-import numpy as np 
-import matplotlib.pyplot as plt  
+import numpy as np
+import matplotlib.pyplot as plt
 import mesa_star_class
 import os
 import astropy.units as u
-import astropy.constants as c 
+import astropy.constants as c
 
 mesa_dir = '/Users/SavvasGCh/mesa-r10398'
 plot_results_dir = '/Users/SavvasGCh/Desktop'
@@ -39,7 +39,7 @@ def burning_regions(mesa_dir = mesa_dir,
                 ylim=None,
                 ecap_density_corrections=True,
                 t_comp=1e4*u.yr):
-    
+
     '''
     Define various burning and other relative regions according
     to the data stored in $MESA_DIR
@@ -108,7 +108,7 @@ def burning_regions(mesa_dir = mesa_dir,
 
     plt.text(10.0, 8.3, r'$e^{-}$cSN', fontsize=15, rotation=90,color='red',verticalalignment='bottom')
 
-    
+
 # Plotters
 
 def plotRhoT(star,
@@ -123,7 +123,7 @@ def plotRhoT(star,
     and it plots the (log) central density vs (log) central temperature
     diagram.
     '''
-    
+
     prepare_canvas()
     burning_regions()
 
@@ -131,28 +131,28 @@ def plotRhoT(star,
 
     labels = ['LM;WNO', 'LM;WO1', 'LM;WO2', 'IM;WNO', 'IM;WO1', 'IM;WO2', 'SM;WNO', 'SM;WO1', 'SM;WO2']
 
-    p1 = str(round(float(star.getMass()), 1)) + r'M$_{\odot}$'
+    tag1 = str(round(float(star.getMass()), 1)) + r'M$_{\odot}$'
 
     if star.getMetallicity() == '0.0001' and star.getOvershoot() == '0.0000':
-        p2 = labels[0]
+        tag2 = labels[0]
     elif star.getMetallicity() == '0.0001' and star.getOvershoot() == '0.0140':
-        p2 = labels[1]
+        tag2 = labels[1]
     elif star.getMetallicity() == '0.0001' and star.getOvershoot() == '0.0160':
-        p2 = labels[2]
+        tag2 = labels[2]
     elif star.getMetallicity() == '0.0010' and star.getOvershoot() == '0.0000':
-        p2 = labels[3]
+        tag2 = labels[3]
     elif star.getMetallicity() == '0.0010' and star.getOvershoot() == '0.0140':
-        p2 = labels[4]
+        tag2 = labels[4]
     elif star.getMetallicity() == '0.0010' and star.getOvershoot() == '0.0160':
-        p2 = labels[5]
+        tag2 = labels[5]
     elif star.getMetallicity() == '0.0200' and star.getOvershoot() == '0.0000':
-        p2 = labels[6]
+        tag2 = labels[6]
     elif star.getMetallicity() == '0.0200' and star.getOvershoot() == '0.0140':
-        p2 = labels[7]
+        tag2 = labels[7]
     elif star.getMetallicity() == '0.0200' and star.getOvershoot() == '0.0160':
-        p2 = labels[8]
+        tag2 = labels[8]
 
-    plt.plot(h.data('log_center_Rho'), h.data('log_center_T'), label = p1 + ', ' + p2)
+    plt.plot(h.data('log_center_Rho'), h.data('log_center_T'), label = tag1 + ', ' + tag2)
 
     legend = plt.legend(loc = 'upper left', prop = {'size':12}, bbox_to_anchor=(1, 1), shadow = False)
 
@@ -177,7 +177,7 @@ def plotRhoT(star,
         plt.clf()
     else:
         plt.show()
-        
+
 
 
 
