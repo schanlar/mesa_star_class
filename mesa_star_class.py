@@ -4,26 +4,28 @@
 '''
 
 
-import mesa_reader as mr 
+import mesa_reader as mr
 import os
 
- 
+
 class MESA_STAR(object):
 
     # Constructor
 
-    def __init__(self, 
-        mass: str, 
-        metallicity: str, 
-        overshooting: str, 
-        history_name = 'history', 
-        profile_number = 'final', 
+    def __init__(self,
+        mass: str,
+        metallicity: str,
+        overshooting: str,
+        history_name = 'history',
+        profile_number = 'final',
         **kwargs):
 
         '''
-        The argument "profile_number" accepts either the number of a profile (e.g. 28, for profile28.data), or the word "final" as a default value which corresponds to the final profile (final_profile.data).
+        The argument "profile_number" accepts either the number of a profile (e.g. 28, for profile28.data),
+        or the word "final" as a default value which corresponds to the final profile (final_profile.data).
 
-        The absolute paths for the history file, and a given profile can be set using the kwargs "history_path", and "profile_path" respectively.
+        The absolute paths for the history file, and a given profile can be set using the kwargs "history_path",
+        and "profile_path" respectively.
         '''
 
         self.initial_mass = mass
@@ -45,7 +47,7 @@ class MESA_STAR(object):
             f'> Initial metallicity: {self.initial_metallicity}'  + '\n' + \
             f'> Overshooting factor: {self.initial_overshooting}' + '\n' + \
             ']'
-    
+
     # Accesser Methods (getters)
 
     def getMass(self):
@@ -74,7 +76,7 @@ class MESA_STAR(object):
         It returns a <class 'mesa_reader.MesaData'> object.
         '''
         h = mr.MesaData(os.path.join(self.history_path, self.history_name))
-        return h 
+        return h
 
     def getProfile(self):
         '''
@@ -97,7 +99,7 @@ class MESA_STAR(object):
         Returns the name of the MESA profile file (type: str)
         '''
         return self.profile_name
-    
+
     def getHistoryPath(self):
         '''
         Returns the absolute path for the MESA history file (type: str)
@@ -110,7 +112,7 @@ class MESA_STAR(object):
         '''
         return self.profile_path
 
-    
+
     # Mutator Methods (setters)
 
     def setMass(self, new_mass: str):
@@ -118,7 +120,7 @@ class MESA_STAR(object):
         Set a new value for the initial mass (type: str)
         '''
         self.initial_mass = new_mass
-    
+
     def setMetallicity(self, new_metallicity: str):
         '''
         Set a new value for the initial metallicity (type: str)
@@ -163,4 +165,4 @@ def main():
 
 if __name__ == '__main__':
     main()
-    
+
