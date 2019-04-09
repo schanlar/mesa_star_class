@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import mesa_star_class
+from mesa_star_class import MESA_STAR
 import os
 import astropy.units as u
 import astropy.constants as c
