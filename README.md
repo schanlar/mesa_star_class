@@ -1,5 +1,5 @@
 # mesa_star_class
-The mesa_star_class defines a stellar model based on its initial mass, initial metallicity, and overshooting factor.
+The [mesa_star_class] defines a stellar model based on its initial mass, initial metallicity, and overshooting factor.
 
 For more information check [MESA documentation](http://mesa.sourceforge.net/)
 
