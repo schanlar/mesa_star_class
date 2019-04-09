@@ -16,7 +16,9 @@ myStar = MESA_STAR(mass = '7.0000',
 
 # Set paths for various models
 
-paths = ['/Users/SavvasGCh/Documents/GitHub/mesa_star_class/Data/2p6M/LOGS', '/Users/SavvasGCh/Documents/GitHub/mesa_star_class/Data/5p0M/LOGS', '/Users/SavvasGCh/Documents/GitHub/mesa_star_class/Data/7p0M/LOGS']
+paths = ['/Users/SavvasGCh/Documents/GitHub/mesa_star_class/Data/2p6M/LOGS',
+        '/Users/SavvasGCh/Documents/GitHub/mesa_star_class/Data/5p0M/LOGS',
+        '/Users/SavvasGCh/Documents/GitHub/mesa_star_class/Data/7p0M/LOGS']
 
 # Set the names of these models.
 # In this example, the values for metallicity and overshooting where chosen arbitrary
