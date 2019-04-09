@@ -4,9 +4,22 @@ import mesa_star_class
 import os
 import astropy.units as u
 import astropy.constants as c
+from functools import wraps
 
 mesa_dir = '/Users/SavvasGCh/mesa-r10398'
 plot_results_dir = '/Users/SavvasGCh/Desktop'
+
+
+def plot_decorator(func):
+
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+
+        print('Plotting in progress...')
+        func(*args, **kwargs)
+        print('All done! \n')
+
+    return wrapper
 
 def prepare_canvas():
     '''
@@ -111,6 +124,7 @@ def burning_regions(mesa_dir = mesa_dir,
 
 # Plotters
 
+@plot_decorator
 def plotRhoT(star,
     xlim=None,
     ylim=None,
@@ -183,6 +197,8 @@ def plotRhoT(star,
 
 
 def main():
+
+    #print(plotRhoT.__name__)
 
     print(
         'Show more info for:' + '\n' + \
