@@ -144,27 +144,26 @@ def plotRhoT(star,
     h = star.getHistory()
 
     labels = ['LM;WNO', 'LM;WO1', 'LM;WO2', 'IM;WNO', 'IM;WO1', 'IM;WO2', 'SM;WNO', 'SM;WO1', 'SM;WO2']
+    labels_coord = ['00', '01', '02', '10', '11', '12', '20', '21', '22']
+
+    metallicity_values = ['0.0001', '0.0010', '0.0200']
+    overshoot_values = ['0.0000', '0.0140', '0.0160']
+
+    # The following tag1/tag2 variables, serve as two components of the plot legend
 
     tag1 = str(round(float(star.getMass()), 1)) + r'M$_{\odot}$'
 
-    if star.getMetallicity() == '0.0001' and star.getOvershoot() == '0.0000':
-        tag2 = labels[0]
-    elif star.getMetallicity() == '0.0001' and star.getOvershoot() == '0.0140':
-        tag2 = labels[1]
-    elif star.getMetallicity() == '0.0001' and star.getOvershoot() == '0.0160':
-        tag2 = labels[2]
-    elif star.getMetallicity() == '0.0010' and star.getOvershoot() == '0.0000':
-        tag2 = labels[3]
-    elif star.getMetallicity() == '0.0010' and star.getOvershoot() == '0.0140':
-        tag2 = labels[4]
-    elif star.getMetallicity() == '0.0010' and star.getOvershoot() == '0.0160':
-        tag2 = labels[5]
-    elif star.getMetallicity() == '0.0200' and star.getOvershoot() == '0.0000':
-        tag2 = labels[6]
-    elif star.getMetallicity() == '0.0200' and star.getOvershoot() == '0.0140':
-        tag2 = labels[7]
-    elif star.getMetallicity() == '0.0200' and star.getOvershoot() == '0.0160':
-        tag2 = labels[8]
+    for i in range(len(metallicity_values)):
+        for j in range(len(overshoot_values)):
+
+            if (
+                    f'{star.getMetallicity()}' == metallicity_values[i] and
+                    f'{star.getOvershoot()}' == overshoot_values[j]
+                ):
+
+                idx = labels_coord.index(f'{i}{j}')
+                tag2 = labels[idx]
+                break
 
     plt.plot(h.data('log_center_Rho'), h.data('log_center_T'), label = tag1 + ', ' + tag2)
 
