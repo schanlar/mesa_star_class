@@ -165,7 +165,7 @@ def plotRhoT(star,
                 tag2 = labels[idx]
                 break
 
-    plt.plot(h.data('log_center_Rho'), h.data('log_center_T'), label = tag1 + ', ' + tag2)
+    plt.plot(h.data('log_center_Rho'), h.data('log_center_T'), color = 'b', label = tag1 + ', ' + tag2)
 
     legend = plt.legend(loc = 'upper left', prop = {'size':12}, bbox_to_anchor=(1, 1), shadow = False)
 
