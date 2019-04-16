@@ -8,7 +8,7 @@ import os, sys
 def replace(pattern, subst):
 
     cwd = os.getcwd()
-    file_path = os.path.join(cwd, 'replace_test.py')
+    file_path = os.path.join(cwd, 'mesa_star_class.py')
 
     #Create temp file
     fh, abs_path = mkstemp()
