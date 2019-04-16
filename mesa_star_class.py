@@ -10,7 +10,7 @@ import os
 
 class MESA_STAR(object):
 
-    # Constructor
+    # Main Constructor
 
     def __init__(self,
         mass: str,
@@ -40,6 +40,41 @@ class MESA_STAR(object):
         else:
             self.profile_name = 'final_profile.data'
 
+
+    # Second Constructor
+
+    @classmethod # This decorator accounts for function overloading as in C++
+    def from_string(cls,
+        input_as_string: str,
+        history_name = 'history',
+        profile_number = 'final',
+        **kwargs):
+
+        '''
+        This constructor builds a MESA_STAR object when the user passes the
+        info for mass, metallicity, and overshooting as a string with format
+        "mass_metallicity_overshooting".
+
+        The function parses the string and continues by calling the class.
+        All other relative variables (e.g. history_name, profile_path etc)
+        can/should be inserted separately.
+        '''
+
+        mass, metallicity, overshooting = map(str, input_as_string.split('_'))
+
+        history_path = kwargs.get('history_path')
+        profile_path = kwargs.get('profile_path')
+
+        star = cls(mass,
+            metallicity,
+            overshooting,
+            history_name,
+            profile_number,
+            **kwargs)
+
+        return star
+
+    # Output
 
     def __str__(self):
         return 'MESA_STAR[' + '\n' + \
@@ -165,4 +200,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
