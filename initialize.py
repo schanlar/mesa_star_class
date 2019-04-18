@@ -34,8 +34,11 @@ def main():
     subst_mesa = f"mesa_dir = {repr(subst_mesa_dir)}"
     subst_plots = f"plot_results_dir = {repr(subst_plots_dir)}"
 
+    print('Setting paths...')
     replace(pattern_mesa, subst_mesa)
     replace(pattern_plots, subst_plots)
+    print('All done!')
+    print('*'*30)
 
 
 if __name__ == '__main__':
