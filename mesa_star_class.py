@@ -170,10 +170,8 @@ class MESA_STAR(object):
     def getName(self):
         '''
         Returns the name of the star as a single string.
-
-        Here as name we consider the following format:
-
-            mass_metallicity_overshooting
+        Here as name we consider a string with the following
+        format: mass_metallicity_overshooting
         '''
         a = [self.getMass(), self.getMetallicity(), self.getOvershoot()]
         self.name = '_'.join(a)
@@ -365,9 +363,8 @@ class MESA_STAR(object):
         plot_output_dir = plot_results_dir):
 
         '''
-        It takes a MESA_STAR object as a mandatory argument,
-        and it plots the (log) central density vs (log) central temperature
-        diagram.
+        It plots the (log) central density vs (log) central temperature
+        diagram of a MESA_STAR object.
         '''
 
         self._prepare_canvas()
