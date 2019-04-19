@@ -7,7 +7,9 @@ For more information check [MESA documentation](http://mesa.sourceforge.net/)
 ## Download
 You can download the repository as a zip file, or by typing
 
-  > $ git clone https://github.com/schanlar/mesa_star_class.git
+```bash
+ ~$ git clone https://github.com/schanlar/mesa_star_class.git
+```
 
 in a terminal window.
 
@@ -15,8 +17,9 @@ in a terminal window.
 In order to use the MESA_STAR class, you have to set up the path
 to your MESA directory; in a terminal window type:
 
-  > $ echo $MESA_DIR
-
+```bash
+ ~$ echo $MESA_DIR
+```
 to display the path (assuming the MESA_DIR points to the directory you
 downloaded the MESA code)
 
@@ -27,14 +30,16 @@ saved if you choose to do so.
 **Step 1** : From the command line, open a new window and navigate to the folder
 where the mesa_star_class is located.
 
-  > $ cd /path/to/mesa_star_class
-
+```bash
+ ~$ cd /path/to/mesa_star_class
+```
 
 **Step 2** : When in the folder, run the initialize script as follows
 (Python v3 is assumed):
 
-  > $ python initialize.py /path/to/MESA_DIR /path/to/save/plots/
-
+```bash
+ ~$ python initialize.py /path/to/MESA_DIR /path/to/save/plots/
+```
 
 **Step 3** : You can now use the class, and its plotters to display the diagrams
 you like<sup>1</sup>.
