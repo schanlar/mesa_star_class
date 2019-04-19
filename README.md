@@ -49,6 +49,20 @@ the initialize script, you can do so by using the optional argument
 'plot_output_dir' as shown in the example script:
 
   > example.py
+  
+```python
+from mesa_star_class import MESA_STAR
+
+# Set an output path other than the one defined with the initialize script
+out_path = '/Users/SavvasGCh/Documents/GitHub/mesa_star_class/Plots'
+
+# Make a MESA_STAR object
+mesaStar = MESA_STAR('5.000', '0.0010', '0.0140',
+                     history_path = '/Users/SavvasGCh/Documents/GitHub/mesa_star_class/Data/5p0M/LOGS')
+                     
+# Plot and save a Rho-T diagram
+mesaStar.plotRhoT(saveFigure=True, figureName='Rho_vs_T_2.5000_0.0010_0.0140', plot_output_dir=out_path)
+```
 
 ---
 <sup>1</sup>For the moment only Rho vs T plot is available
