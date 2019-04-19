@@ -1,6 +1,7 @@
 '''
 @author Savvas Chanlaridis
 @version v.16.04.19
+@description https://github.com/schanlar/mesa_star_class
 '''
 
 import numpy as np
@@ -13,13 +14,16 @@ import matplotlib.pyplot as plt
 
 
 
-mesa_dir = '/vol/aibn1107/data2/schanlar/mesa-r10398'
-plot_results_dir = '/users/schanlar/Desktop'
-
-
 
 
 class MESA_STAR(object):
+
+
+    # Paths to MESA stellar evolution code + output for plots
+
+    mesa_dir = '/vol/aibn1107/data2/schanlar/mesa-r10398'
+    plot_results_dir = '/users/schanlar/Desktop'
+
 
 
     # Main Constructor
