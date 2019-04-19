@@ -64,9 +64,9 @@ names = ['2.6000_0.0001_0.0160', '5.0000_0.0010_0.0140', '7.0000_0.0200_0.0000']
 
 # Loop over the data
 # ------------------------------------------------------------------------------
-for name, dir in zip(names,paths):
+for name, direct in zip(names,paths):
 
-    star = ms.from_string(name, history_path = dir)
+    star = ms.from_string(name, history_path = direct)
 
     figureName = f'Rho_vs_T_{name}.pdf'
 
