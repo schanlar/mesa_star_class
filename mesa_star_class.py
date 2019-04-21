@@ -183,11 +183,16 @@ class MESA_STAR(object):
 
     def getCoreMass(self):
         '''
-        Returns a string with the value of the carbon core mass.
+        Returns
+            a float with the value of the initial star mass.
+            a float with the value of the initial metallicity.
+            a float with the value of the overshooting factor.
+            a float with the value of the carbon core mass.
+            a float with the value of the envelope mass.
 
         If MESA cannot distinguish between the carbon core mass,
         and the final mass of the star, then we define the outer
-        boundary of the carbon core at the location where the
+        boundary of the carbon core as the location where the
         pressure drops to 80% of its maximum value.
 
         If you're satisfied with this estimation, the function
@@ -195,7 +200,7 @@ class MESA_STAR(object):
         initial metallicity, overshooting factor, and envelope
         mass.
 
-        It is also possible to set a new value for the core mass
+        It is also possible to set a new value for the core mass,
         ignoring the original approximation. In this case, a plot
         will appear every time you enter a new value for the core
         mass, in order to help visualize the mass cut.
