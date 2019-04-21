@@ -181,6 +181,117 @@ class MESA_STAR(object):
         self.name = '_'.join(a)
         return self.name
 
+    def getCoreMass(self):
+        '''
+        Returns a string with the value of the carbon core mass.
+
+        If MESA cannot distinguish between the carbon core mass,
+        and the final mass of the star, then we define the outer
+        boundary of the carbon core at the location where the
+        pressure drops to 80% of its maximum value.
+
+        If you're satisfied with this estimation, the function
+        will return this value along with the initial mass,
+        initial metallicity, overshooting factor, and envelope
+        mass.
+
+        It is also possible to set a new value for the core mass
+        ignoring the original approximation. In this case, a plot
+        will appear every time you enter a new value for the core
+        mass, in order to help visualize the mass cut.
+        '''
+
+        try:
+            h = self.getHistory()
+        except:
+            raise ValueError('Failed when trying to load history file!')
+
+
+        if h.data('star_mass')[-1] != h.data('c_core_mass')[-1]:
+
+            initial_mass = round(float(self.getMass()),1)
+            initial_metallicity = float(self.getMetallicity())
+            overshooting_factor = float(self.getOvershoot())
+
+            final_core_mass = round(h.data('c_core_mass')[-1], 3)
+            final_envelope_mass = round(h.data('star_mass')[-1] - h.data('c_core_mass')[-1], 3)
+
+            return initial_mass, initial_metallicity, overshooting_factor, final_core_mass, final_envelope_mass
+
+        elif h.data('star_mass')[-1] == h.data('c_core_mass')[-1]:
+
+            try:
+                p = self.getProfile()
+
+                initial_mass = round(float(self.getMass()),1)
+                initial_metallicity = float(self.getMetallicity())
+                overshooting_factor = float(self.getOvershoot())
+
+                mask = 0.80 * max(p.data('logP'))
+                logP = p.data('logP')
+                core_boundary = p.data('mass')[np.where(logP < mask)][-1]
+
+                print(f'Final core mass estimate: {round(core_boundary,3)}')
+
+                plt.figure(figsize = (13,9))
+                plt.xlabel(r'Mass coordinate [M$_{\odot}$]')
+                plt.ylabel(r'$\log(P)$ [Ba]')
+
+                plt.plot(p.data('mass'), p.data('logP'))
+                plt.axvline(core_boundary, c = 'r', linestyle = '--')
+                plt.show()
+
+                answer = input('Accept this estimation? (y/n) ')
+
+                if answer == 'y' or answer == 'Y':
+                    final_core_mass = round(core_boundary, 3)
+                    final_envelope_mass = round(h.data('star_mass')[-1] - final_core_mass, 3)
+
+                    return initial_mass, initial_metallicity, overshooting_factor, final_core_mass, final_envelope_mass
+
+                else:
+
+                    answer = input('Do you want to set a value for the core mass? (y/n) ')
+
+                    if answer == 'y' or answer == 'Y':
+                        tryAgain = True
+
+                        while tryAgain:
+                            core_boundary = float(input('set value: '))
+
+                            plt.figure(figsize = (13,9))
+                            plt.xlabel(r'Mass coordinate [M$_{\odot}$]')
+                            plt.ylabel(r'$\log(P)$ [Ba]')
+
+                            plt.plot(p.data('mass'), p.data('logP'))
+                            plt.axvline(core_boundary, c = 'r', linestyle = '--')
+                            plt.show()
+
+                            answer = input('Try again? (y/n) ')
+
+                            if answer == 'n' or answer == 'N':
+                                tryAgain = False
+                            else:
+                                tryAgain = True
+
+                        final_core_mass = round(core_boundary, 3)
+                        final_envelope_mass = round(h.data('star_mass')[-1] - final_core_mass, 3)
+
+                        return initial_mass, initial_metallicity, overshooting_factor, final_core_mass, final_envelope_mass
+
+                    else:
+
+                        final_core_mass = float('nan')
+                        final_envelope_mass = float('nan')
+
+                        return initial_mass, initial_metallicity, overshooting_factor, final_core_mass, final_envelope_mass
+
+
+            except:
+                raise ValueError('WARNING: Failed to load profile! Make sure "logP" is defined in profile_columns.list')
+
+
+
 
 
 
