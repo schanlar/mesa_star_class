@@ -209,7 +209,7 @@ class MESA_STAR(object):
         try:
             h = self.getHistory()
         except:
-            raise ValueError('Failed when trying to load history file!')
+            raise SystemExit('Failed when trying to load history file!')
 
 
         if h.data('star_mass')[-1] != h.data('c_core_mass')[-1]:
@@ -293,7 +293,7 @@ class MESA_STAR(object):
 
 
             except:
-                raise ValueError('WARNING: Failed to load profile! Make sure "logP" is defined in profile_columns.list')
+                raise SystemExit('WARNING: Failed to load profile! Make sure "logP" is defined in profile_columns.list')
 
 
 
@@ -501,6 +501,10 @@ class MESA_STAR(object):
         # The following tag1/tag2 variables, serve as two components of the plot legend
 
         tag1 = str(round(float(self.getMass()), 1)) + r'M$_{\odot}$'
+
+        # TODO: Make next clause more efficient
+        # Perhaps break down the if statement into two separate conditions, so the nested
+        # for-loop would be entered only when the right metallicity has been found
 
         for i in range(len(metallicity_values)):
             for j in range(len(overshoot_values)):
