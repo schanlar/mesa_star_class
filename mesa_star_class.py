@@ -583,6 +583,43 @@ class MESA_STAR(object):
 
 
 
+    @staticmethod
+    def export_csvFile(zip_object, name = 'csvData'):
+
+        '''
+        This static method takes a <zip object> as a mandatory argument,
+        and creates a csv file of the data along with a single row header.
+
+        The header format follows the output of the <MESA_STAR.getCoreMass()>
+        method.
+
+        The default name of the output file is "csvData" and it can be changed
+        using the optional  argument "name".
+        '''
+
+        # A simple header that follows the self.getCoreMass() method
+        header = ['#initial_mass', 'initial_metallicity', 'overshooting_factor', 'core_mass', 'envelope_mass']
+
+        # List that stores all data + header
+        csvData = [header]
+
+        # Unpack data
+        for a,b,c,d,e in zip_object:
+
+            data_row = [a,b,c,d,e]
+            csvData.append(data_row)
+
+
+        # Create csv file
+        with open(f'{name}.csv', 'w') as csvFile:
+            writer = csv.writer(csvFile)
+            writer.writerows(csvData)
+
+        csvFile.close()
+
+
+
+
 
 
 
