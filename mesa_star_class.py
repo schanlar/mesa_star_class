@@ -372,6 +372,8 @@ class MESA_STAR(object):
         The basic canvas for plots
         '''
 
+        # FIXME: Change canvas 
+
         plt.rcParams['figure.figsize'] = [15, 10]
         plt.rcParams['axes.linewidth'] = 2 #3
 
@@ -503,8 +505,8 @@ class MESA_STAR(object):
         tag1 = str(round(float(self.getMass()), 1)) + r'M$_{\odot}$'
 
         # TODO: Make next clause more efficient
-        # Perhaps break down the if statement into two separate conditions, so the nested
-        # for-loop would be entered only when the right metallicity has been found
+        #       Perhaps break down the if statement into two separate conditions, so the nested
+        #       for-loop would be entered only when the right metallicity has been found
 
         for i in range(len(metallicity_values)):
             for j in range(len(overshoot_values)):
