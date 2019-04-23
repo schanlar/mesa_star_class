@@ -1,15 +1,15 @@
 '''
-@author Savvas Chanlaridis
-@version v.16.04.19
-@description https://github.com/schanlar/mesa_star_class
+@version: v.23.04.19
+@description: https://github.com/schanlar/mesa_star_class
 '''
 
 import numpy as np
 import mesa_reader as mr
-import os
+import os, re, glob, csv
 import astropy.units as u
 import astropy.constants as c
 from functools import wraps
+from file_read_backwards import FileReadBackwards as frb
 import matplotlib.pyplot as plt
 
 
@@ -39,6 +39,9 @@ class MESA_STAR(object):
         '''
         The argument "profile_number" accepts either the number of a profile (e.g. 28, for profile28.data),
         or the word "final" as a default value which corresponds to the final profile (final_profile.data).
+
+        If there is no file with such a name, you can use the "find_profile_number()"
+        method, in order to find a specific profile.
 
         The absolute paths for the history file, and a given profile can be set using the kwargs "history_path",
         and "profile_path" respectively.
@@ -234,16 +237,30 @@ class MESA_STAR(object):
 
                 mask = 0.80 * max(p.data('logP'))
                 logP = p.data('logP')
+                logR = p.data('logR')
                 core_boundary = p.data('mass')[np.where(logP < mask)][-1]
 
-                print(f'Final core mass estimate: {round(core_boundary,3)}')
+                print(f'Final core mass estimate: {round(core_boundary,3)} Msol')
 
-                plt.figure(figsize = (13,9))
-                plt.xlabel(r'Mass coordinate [M$_{\odot}$]')
-                plt.ylabel(r'$\log(P)$ [Ba]')
+                # Make a plot for visual aid
+                fig, ax1 = plt.subplots(figsize = (13,9))
 
-                plt.plot(p.data('mass'), p.data('logP'))
-                plt.axvline(core_boundary, c = 'r', linestyle = '--')
+                color = 'tab:red'
+                ax1.set_xlabel(r'Mass coordinate [M$_{\odot}$]')
+                ax1.set_ylabel(r'$\logP$ [Ba]', color=color)
+                ax1.plot(p.data('mass'), logP, color=color)
+                ax1.tick_params(axis='y', labelcolor=color)
+
+                ax2 = ax1.twinx()  # instantiate a second axes that shares the same x-axis
+
+                color = 'tab:blue'
+                ax2.set_ylabel(r'$\log R$ [R$_{\odot}$]', color=color)  # we already handled the x-label with ax1
+                ax2.plot(p.data('mass'), logR, color=color)
+                ax2.tick_params(axis='y', labelcolor=color)
+
+                fig.tight_layout()
+
+                plt.axvline(core_boundary, c = 'gray', linestyle = '--')
                 plt.show()
 
                 answer = input('Accept this estimation? (y/n) ')
@@ -264,12 +281,25 @@ class MESA_STAR(object):
                         while tryAgain:
                             core_boundary = float(input('set value: '))
 
-                            plt.figure(figsize = (13,9))
-                            plt.xlabel(r'Mass coordinate [M$_{\odot}$]')
-                            plt.ylabel(r'$\log(P)$ [Ba]')
+                            # Make a plot for visual aid
+                            fig, ax1 = plt.subplots(figsize = (13,9))
 
-                            plt.plot(p.data('mass'), p.data('logP'))
-                            plt.axvline(core_boundary, c = 'r', linestyle = '--')
+                            color = 'tab:red'
+                            ax1.set_xlabel(r'Mass coordinate [M$_{\odot}$]')
+                            ax1.set_ylabel(r'$\logP$ [Ba]', color=color)
+                            ax1.plot(p.data('mass'), logP, color=color)
+                            ax1.tick_params(axis='y', labelcolor=color)
+
+                            ax2 = ax1.twinx()  # instantiate a second axes that shares the same x-axis
+
+                            color = 'tab:blue'
+                            ax2.set_ylabel(r'$\log R$ [R$_{\odot}$]', color=color)  # we already handled the x-label with ax1
+                            ax2.plot(p.data('mass'), logR, color=color)
+                            ax2.tick_params(axis='y', labelcolor=color)
+
+                            fig.tight_layout()
+
+                            plt.axvline(core_boundary, c = 'gray', linestyle = '--')
                             plt.show()
 
                             answer = input('Try again? (y/n) ')
@@ -372,7 +402,7 @@ class MESA_STAR(object):
         The basic canvas for plots
         '''
 
-        # FIXME: Change canvas 
+        # FIXME: Change canvas
 
         plt.rcParams['figure.figsize'] = [15, 10]
         plt.rcParams['axes.linewidth'] = 2 #3
@@ -580,7 +610,6 @@ class MESA_STAR(object):
                 except:
                     return isValid
 
-
             else:
                 return isValid
 
@@ -594,7 +623,7 @@ class MESA_STAR(object):
 
         '''
         This static method takes a <zip object> as a mandatory argument,
-        and creates a csv file of the data along with a single row header.
+        and creates a csv file of the data along with a single-row header.
 
         The header format follows the output of the <MESA_STAR.getCoreMass()>
         method.
@@ -622,6 +651,93 @@ class MESA_STAR(object):
             writer.writerows(csvData)
 
         csvFile.close()
+
+
+    @staticmethod
+    def find_profile_number(path: str, num = -1):
+        '''
+        Returns a string for the profile number.
+
+        It takes a mandatory argument for the path where
+        the profiles.index file is located.
+
+        The optional argument "num" defines the number of row
+        in the file.
+
+        num < 0 means the script will start reading the
+        profiles.index file bottop-up, and will stop at the
+        specified row.
+
+        Thus, num = -1 will return the last saved profile,
+        num = -2 will return the second to last etc.
+
+        num > 0 means the script will start reading the
+        profiles.index file up-bottom, and will stop at the
+        specified row.
+
+        Thus, num = 1 will return the first saved profile
+        within the profiles.index file.
+
+        num = 0 will print the header info of the profiles.index
+        file. In this case, the funtion does not return anything.
+        '''
+
+        counter = 0
+
+        if num < 0:
+            with frb(f'{path}/profiles.index') as file:
+
+                for line in file:
+                    counter -= 1
+
+                    if counter == num:
+
+                        info = re.split(' |, |\n', line)
+
+                        # Try casting the profile number as integer
+                        try:
+                            info[-1] = int(info[-1])
+                        except:
+                            info[-1] = int(info[-2])
+
+                        #print(f'The profile is: profile{info[-1]}.data')
+                        return repr(info[-1])
+
+                if abs(num) > counter:
+                    raise ValueError('Number out of range!')
+
+        elif num > 0:
+            with open(f'{path}/profiles.index', 'r') as file:
+
+                # Skip the first row
+                next(file)
+
+                for line in file:
+                    counter += 1
+
+                    if counter == num:
+
+                        info = re.split(' |, |\n', line)
+
+                        # Try casting the profile number as integer
+                        try:
+                            info[-1] = int(info[-1])
+                        except:
+                            info[-1] = int(info[-2])
+
+                        #print(f'The profile is: profile{info[-1]}.data')
+                        return repr(info[-1])
+
+                if abs(num) > counter:
+                    raise ValueError('Number out of range!')
+
+        else:
+            with open(f'{path}/profiles.index', 'r') as file:
+                for line in file:
+                    print(f'Header info: {line}')
+                    break
+
+
 
 
 
