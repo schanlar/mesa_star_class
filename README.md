@@ -61,7 +61,7 @@ mesaStar = MESA_STAR('5.000', '0.0010', '0.0140',
                      history_path = '/Users/SavvasGCh/Documents/GitHub/mesa_star_class/Data/5p0M/LOGS')
                      
 # Plot and save a Rho-T diagram
-mesaStar.plotRhoT(saveFigure=True, figureName='Rho_vs_T_2.5000_0.0010_0.0140', plot_output_dir=out_path)
+mesaStar.plotRhoT(saveFigure=True, figureName='Rho_vs_T_5.0000_0.0010_0.0140', plot_output_dir=out_path)
 ```
 
 ---
