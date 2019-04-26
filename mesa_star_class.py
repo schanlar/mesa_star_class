@@ -1,5 +1,5 @@
 '''
-@version: v.23.04.19
+@version: v.26.04.19
 @description: https://github.com/schanlar/mesa_star_class
 '''
 
@@ -46,7 +46,10 @@ class MESA_STAR(object):
         The absolute paths for the history file, and a given profile can be set using the kwargs "history_path",
         and "profile_path" respectively.
         '''
-
+        
+        # For internal use
+        self._mesa = 'r10398'
+        
         self.initial_mass = mass
         self.initial_metallicity = metallicity
         self.initial_overshooting = overshooting
@@ -59,8 +62,8 @@ class MESA_STAR(object):
         else:
             self.profile_name = 'final_profile.data'
 
+            
     # Output
-
     def __str__(self):
         return 'MESA_STAR[' + '\n' + \
             f'> Initial mass: {self.initial_mass} Msol' + '\n' + \
@@ -73,7 +76,6 @@ class MESA_STAR(object):
     # --------------------------------------------------------------------------
 
     # Second Constructor
-
     @classmethod # This decorator accounts for function overloading as in C++
     def from_string(cls,
         input_as_string: str,
@@ -106,7 +108,16 @@ class MESA_STAR(object):
         return star
 
 
+    # MESA VERSION
+    # --------------------------------------------------------------------------
 
+    @property
+    def mesa(self):
+        return f'MESA VERSION: {self._mesa}'
+
+    @mesa.setter
+    def mesa(self, new_version: str):
+        self._mesa = new_version
 
 
     # ACCESER METHODS (GETTERS)
