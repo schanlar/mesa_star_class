@@ -1,5 +1,5 @@
 # mesa_star_class
-The [mesa_star_class] defines a stellar model based on its initial mass, initial metallicity, and overshooting factor.
+The ```mesa_star_class``` defines a stellar model based on its initial mass, initial metallicity, and overshooting factor.
 
 For more information check [MESA documentation](http://mesa.sourceforge.net/)
 
@@ -28,7 +28,7 @@ You'll also need to specify a path to a location where your plots will be
 saved if you choose to do so.
 
 **Step 1** : From the command line, open a new window and navigate to the folder
-where the mesa_star_class is located.
+where the ```mesa_star_class``` is located.
 
 ```bash
  ~$ cd /path/to/mesa_star_class
@@ -46,9 +46,9 @@ you like<sup>1</sup>.
 
 If you want to save the figure in a location other the one you specified with
 the initialize script, you can do so by using the optional argument
-'plot_output_dir' as shown in the example script:
+```'plot_output_dir'``` as shown in the ```example.py``` script:
 
-  > example.py
+  > Example
   
 ```python
 from mesa_star_class import MESA_STAR
