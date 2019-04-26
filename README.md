@@ -60,6 +60,13 @@ out_path = '/Users/SavvasGCh/Documents/GitHub/mesa_star_class/Plots'
 mesaStar = MESA_STAR('5.000', '0.0010', '0.0140',
                      history_path = '/Users/SavvasGCh/Documents/GitHub/mesa_star_class/Data/5p0M/LOGS')
                      
+# Version of MESA used for the evolution of this star
+# The default version is r10398
+mesaStar.mesa
+
+# If another version of MESA was used, you can change the default value
+mesaStar.mesa = 'r11532'
+                     
 # Plot and save a Rho-T diagram
 mesaStar.plotRhoT(saveFigure=True, figureName='Rho_vs_T_5.0000_0.0010_0.0140', plot_output_dir=out_path)
 ```
