@@ -26,14 +26,14 @@ logger.setLevel(logging.DEBUG)
 formatter = logging.Formatter('%(asctime)s:%(levelname)s:%(message)s')
 
 # Handler to write log data into a file, from 
-# warning priority and above
+# debug priority and above
 file_handler = logging.FileHandler('mesa_star.log')
-file_handler.setLevel(logging.WARNING)
 file_handler.setFormatter(formatter)
 
 # Handler to display log data on the screen
-# from debug priority and above
+# from warning priority and above
 stream_handler = logging.StreamHandler()
+stream_handler.setLevel(logging.WARNING)
 stream_handler.setFormatter(formatter)
 
 # Add handlers to the logger
@@ -253,6 +253,7 @@ class MESA_STAR(object):
         try:
             h = self.getHistory()
         except:
+            logger.exception('Failed when trying to load history file!')
             raise SystemExit('Failed when trying to load history file!')
 
 
@@ -364,7 +365,8 @@ class MESA_STAR(object):
 
 
             except:
-                raise SystemExit('WARNING: Failed to load profile! Make sure "logP" is defined in profile_columns.list')
+                logger.exception('Failed to load profile!')
+                raise SystemExit('Make sure "logP" is defined in profile_columns.list')
 
 
 
@@ -649,12 +651,15 @@ class MESA_STAR(object):
                     return isValid
 
                 except:
+                    logger.exception(f'The name {name_as_string} is not valid!')
                     return isValid
 
             else:
+                logger.warning(f'The length of the name {name_as_string} is not valid!')
                 return isValid
 
         except:
+            logger.exception(f'The name {name_as_string} is not valid!')
             return isValid
 
 
