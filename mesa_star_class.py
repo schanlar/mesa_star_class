@@ -6,13 +6,18 @@
 import numpy as np
 import mesa_reader as mr
 import os, re, glob, csv
+import logging
 import astropy.units as u
 import astropy.constants as c
 from functools import wraps
 from file_read_backwards import FileReadBackwards as frb
 import matplotlib.pyplot as plt
 
-
+# The basic configuration for logging file
+# If a filename is not provided, then the logging info
+# will be displayed on the screen
+logging.basicConfig(filename='mesa_star.log', level=logging.INFO,
+                    format='%(asctime)s:%(levelname)s:%(message)s')
 
 
 
@@ -61,6 +66,8 @@ class MESA_STAR(object):
             self.profile_name = f'profile{profile_number}.data'
         else:
             self.profile_name = 'final_profile.data'
+            
+        logging.info(f'Created MESA_STAR instance: {self.__str__}')
 
             
     # Output
@@ -104,6 +111,8 @@ class MESA_STAR(object):
             history_name,
             profile_number,
             **kwargs)
+        
+        logging.info(f'Created MESA_STAR instance: {star.__str__}')
 
         return star
 
