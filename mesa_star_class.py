@@ -31,7 +31,7 @@ file_handler = logging.FileHandler('mesa_star.log')
 file_handler.setFormatter(formatter)
 
 # Handler to display log data on the screen
-# from warning priority and above
+# from warning priority or worse
 stream_handler = logging.StreamHandler()
 stream_handler.setLevel(logging.WARNING)
 stream_handler.setFormatter(formatter)
@@ -46,14 +46,12 @@ class MESA_STAR(object):
 
 
     # Paths to MESA stellar evolution code + output for plots
-
     mesa_dir = '/vol/aibn1107/data2/schanlar/mesa-r10398'
     plot_results_dir = '/users/schanlar/Desktop'
 
 
 
     # Main Constructor
-
     def __init__(self,
         mass: str,
         metallicity: str,
