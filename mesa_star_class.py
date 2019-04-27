@@ -67,7 +67,9 @@ class MESA_STAR(object):
         else:
             self.profile_name = 'final_profile.data'
             
-        logging.info(f'Created MESA_STAR instance: {self.__str__}')
+        # Make an entry in the mesa_star.log file, every time
+        # a MESA_STAR instance is created
+        logging.info(f'Created MESA_STAR instance; Mass: {self.initial_mass}, Metallicity: {self.initial_metallicity}, Overshooting: {self.initial_overshooting}')
 
             
     # Output
@@ -111,8 +113,6 @@ class MESA_STAR(object):
             history_name,
             profile_number,
             **kwargs)
-        
-        logging.info(f'Created MESA_STAR instance: {star.__str__}')
 
         return star
 
