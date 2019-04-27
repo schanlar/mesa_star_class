@@ -14,10 +14,31 @@ from file_read_backwards import FileReadBackwards as frb
 import matplotlib.pyplot as plt
 
 # The basic configuration for logging file
-# If a filename is not provided, then the logging info
-# will be displayed on the screen
-logging.basicConfig(filename='mesa_star.log', level=logging.INFO,
-                    format='%(asctime)s:%(levelname)s:%(message)s')
+# Uncomment this if you want to use the root logger
+# logging.basicConfig(filename='mesa_star.log', level=logging.INFO,
+#                    format='%(asctime)s:%(levelname)s:%(message)s')
+
+# Create a logger other than root
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+
+# Specify the format of the logger
+formatter = logging.Formatter('%(asctime)s:%(levelname)s:%(message)s')
+
+# Handler to write log data into a file, from 
+# warning priority and above
+file_handler = logging.FileHandler('mesa_star.log')
+file_handler.setLevel(logging.WARNING)
+file_handler.setFormatter(formatter)
+
+# Handler to display log data on the screen
+# from debug priority and above
+stream_handler = logging.StreamHandler()
+stream_handler.setFormatter(formatter)
+
+# Add handlers to the logger
+logger.addHandler(file_handler)
+logger.addHandler(stream_handler)
 
 
 
@@ -69,7 +90,7 @@ class MESA_STAR(object):
             
         # Make an entry in the mesa_star.log file, every time
         # a MESA_STAR instance is created
-        logging.info(f'Created MESA_STAR instance; Mass: {self.initial_mass}, Metallicity: {self.initial_metallicity}, Overshooting: {self.initial_overshooting}')
+        logger.info(f'Created MESA_STAR instance; Mass: {self.initial_mass}, Metallicity: {self.initial_metallicity}, Overshooting: {self.initial_overshooting}')
 
             
     # Output
