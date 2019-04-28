@@ -250,9 +250,20 @@ class MESA_STAR(object):
 
         try:
             h = self.getHistory()
-        except:
-            logger.exception('Failed when trying to load history file!')
-            raise SystemExit('Failed when trying to load history file!')
+            
+        except FileNotFoundError as e:
+            logger.exception('Could not load history file!')
+            raise SystemExit(e)
+            
+        except Exception as e:
+            logger.exception('Something went wrong while trying to load the history file!')
+            raise SystemExit(e)
+            
+        else:
+            logger.info('History file loaded succesfully!')
+            
+        finally:
+            pass
 
 
         if h.data('star_mass')[-1] != h.data('c_core_mass')[-1]:
@@ -270,7 +281,16 @@ class MESA_STAR(object):
 
             try:
                 p = self.getProfile()
-
+                
+            except FileNotFoundError as e:
+                logger.exception('Failed to load profile!')
+                raise SystemExit(e)
+             
+            except Exception as e:
+                logger.exception('Something went wrong while trying to load the profile!')
+                raise SystemExit(e)
+                
+            else:
                 initial_mass = round(float(self.getMass()),1)
                 initial_metallicity = float(self.getMetallicity())
                 overshooting_factor = float(self.getOvershoot())
@@ -312,7 +332,6 @@ class MESA_STAR(object):
                     return initial_mass, initial_metallicity, overshooting_factor, final_core_mass, final_envelope_mass
 
                 else:
-
                     answer = input('Do you want to set a value for the core mass? (y/n) ')
 
                     if answer == 'y' or answer == 'Y':
@@ -355,18 +374,10 @@ class MESA_STAR(object):
                         return initial_mass, initial_metallicity, overshooting_factor, final_core_mass, final_envelope_mass
 
                     else:
-
                         final_core_mass = float('nan')
                         final_envelope_mass = float('nan')
 
                         return initial_mass, initial_metallicity, overshooting_factor, final_core_mass, final_envelope_mass
-
-
-            except:
-                logger.exception('Failed to load profile!')
-                raise SystemExit('Make sure "logP" is defined in profile_columns.list')
-
-
 
 
 
@@ -563,7 +574,20 @@ class MESA_STAR(object):
         self._prepare_canvas()
         self._burning_regions()
 
-        h = self.getHistory()
+        try:
+            h = self.getHistory()
+        
+        except FileNotFoundError as e:
+            logger.exception('Could not load history file!')
+            raise SystemExit(e)
+            
+        except Exception as e:
+            logger.exception('Something went wrong while trying to load the history file!')
+            raise SystemExit(e)
+            
+        else:
+            logger.info('History file loaded succesfully!')
+            
 
         labels = ['LM;WNO', 'LM;WO1', 'LM;WO2', 'IM;WNO', 'IM;WO1', 'IM;WO2', 'SM;WNO', 'SM;WO1', 'SM;WO2']
         labels_coord = ['00', '01', '02', '10', '11', '12', '20', '21', '22']
