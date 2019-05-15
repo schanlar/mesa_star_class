@@ -98,6 +98,11 @@ class MESA_STAR(object):
             f'> Initial metallicity: {self.initial_metallicity}'  + '\n' + \
             f'> Overshooting factor: {self.initial_overshooting}' + '\n' + \
             ']'
+    
+    
+    # Destructor
+    def __del__(self):
+        print('MESA_STAR Object has been destructed!')
 
 
     # CLASS METHODS
