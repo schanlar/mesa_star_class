@@ -25,7 +25,7 @@ logger.setLevel(logging.DEBUG)
 # Specify the format of the logger
 formatter = logging.Formatter('%(asctime)s:%(levelname)s:%(message)s')
 
-# Handler to write log data into a file, from 
+# Handler to write log data into a file, from
 # debug priority and above
 file_handler = logging.FileHandler('mesa_star.log')
 file_handler.setFormatter(formatter)
@@ -70,10 +70,10 @@ class MESA_STAR(object):
         The absolute paths for the history file, and a given profile can be set using the kwargs "history_path",
         and "profile_path" respectively.
         '''
-        
+
         # For internal use
         self._mesa = 'r10398'
-        
+
         self.initial_mass = mass
         self.initial_metallicity = metallicity
         self.initial_overshooting = overshooting
@@ -85,12 +85,12 @@ class MESA_STAR(object):
             self.profile_name = f'profile{profile_number}.data'
         else:
             self.profile_name = 'final_profile.data'
-            
+
         # Make an entry in the mesa_star.log file, every time
         # a MESA_STAR instance is created
         logger.info(f'Created MESA_STAR instance; Mass: {self.initial_mass}, Metallicity: {self.initial_metallicity}, Overshooting: {self.initial_overshooting}')
 
-            
+
     # Output
     def __str__(self):
         return 'MESA_STAR[' + '\n' + \
@@ -98,8 +98,8 @@ class MESA_STAR(object):
             f'> Initial metallicity: {self.initial_metallicity}'  + '\n' + \
             f'> Overshooting factor: {self.initial_overshooting}' + '\n' + \
             ']'
-    
-    
+
+
     # Destructor
     def __del__(self):
         print('MESA_STAR Object has been destructed!')
@@ -228,6 +228,21 @@ class MESA_STAR(object):
         self.name = '_'.join(a)
         return self.name
 
+    def getChandraMass(self):
+        '''
+        Returns an estimation for the Chandrasekhar mass limit
+        based on the electron fraction Y_e
+        '''
+        try:
+            p = self.getProfile()
+        except Exception as e:
+            logger.exception('Something went wrong while trying to load the profile!')
+            raise SystemExit(e)
+
+        average_ye = round(np.mean(p.data('ye')), 3)
+        chan_mass = round(5.836 * (average_ye ** 2), 3)
+        return chan_mass
+
     def getCoreMass(self):
         '''
         Returns
@@ -255,18 +270,18 @@ class MESA_STAR(object):
 
         try:
             h = self.getHistory()
-            
+
         except FileNotFoundError as e:
             logger.exception('Could not load history file!')
             raise SystemExit(e)
-            
+
         except Exception as e:
             logger.exception('Something went wrong while trying to load the history file!')
             raise SystemExit(e)
-            
+
         else:
             logger.info('History file loaded succesfully!')
-            
+
         finally:
             pass
 
@@ -286,15 +301,15 @@ class MESA_STAR(object):
 
             try:
                 p = self.getProfile()
-                
+
             except FileNotFoundError as e:
                 logger.exception('Failed to load profile!')
                 raise SystemExit(e)
-             
+
             except Exception as e:
                 logger.exception('Something went wrong while trying to load the profile!')
                 raise SystemExit(e)
-                
+
             else:
                 initial_mass = round(float(self.getMass()),1)
                 initial_metallicity = float(self.getMetallicity())
@@ -581,18 +596,18 @@ class MESA_STAR(object):
 
         try:
             h = self.getHistory()
-        
+
         except FileNotFoundError as e:
             logger.exception('Could not load history file!')
             raise SystemExit(e)
-            
+
         except Exception as e:
             logger.exception('Something went wrong while trying to load the history file!')
             raise SystemExit(e)
-            
+
         else:
             logger.info('History file loaded succesfully!')
-            
+
 
         labels = ['LM;WNO', 'LM;WO1', 'LM;WO2', 'IM;WNO', 'IM;WO1', 'IM;WO2', 'SM;WNO', 'SM;WO1', 'SM;WO2']
         labels_coord = ['00', '01', '02', '10', '11', '12', '20', '21', '22']
@@ -647,9 +662,36 @@ class MESA_STAR(object):
             plt.show()
 
 
+    @__plot_decorator
+    def plotElectronFraction(self,
+                             saveFigure = False,
+                             plot_dir = '',
+                             colour = 'blue',
+                             figureName = 'mass_vs_ye.pdf'):
 
+        info = self.getName()
+        try:
+            p = self.getProfile()
+        except Exception as e:
+            logger.exception('Something went wrong while trying to load the profile!')
+            raise SystemExit(e)
 
+        plt.figure(figsize = (13,9))
+        plt.xlabel(r'Mass coordinate [M$_{\odot}$]', size = 15)
+        plt.ylabel(r'Y$_e$', size = 15)
 
+        if saveFigure:
+
+            folder_name = os.path.join(plot_dir, info)
+            plot_dir = os.path.join(plot_dir, folder_name)
+
+            plt.plot(p.data('mass'), p.data('ye'), c = colour)
+            plt.savefigure(f'{os.path.join(plot_dir, figureName)}', bbox_inches = 'tight', dpi = 300)
+            plt.clf()
+        else:
+
+            plt.plot(p.data('mass'), p.data('ye'), c = colour)
+            plt.clf()
 
 
 
