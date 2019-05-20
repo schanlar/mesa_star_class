@@ -686,12 +686,12 @@ class MESA_STAR(object):
             plot_dir = os.path.join(plot_dir, folder_name)
 
             plt.plot(p.data('mass'), p.data('ye'), c = colour)
-            plt.savefigure(f'{os.path.join(plot_dir, figureName)}', bbox_inches = 'tight', dpi = 300)
+            plt.savefig(f'{os.path.join(plot_dir, figureName)}', bbox_inches = 'tight', dpi = 300)
             plt.clf()
         else:
 
             plt.plot(p.data('mass'), p.data('ye'), c = colour)
-            plt.clf()
+            
 
 
 
