@@ -850,6 +850,36 @@ class MESA_STAR(object):
                     break
 
 
+    @staticmethod
+    def find_termination_code(path_to_file: str):
+        '''
+        The function takes a single argument which is the path to the
+        output file, e.g. condor.out, and returns the termination code
+        for this model (if it exists).
+        '''
+
+        keyword = 'termination code: '
+        line_number = 0
+
+        with frb(path_to_file) as file:
+
+            for line in file:
+                line_number += 1
+
+                if line.startswith(keyword) and line_number <= 50:
+
+                    code = line.split(' ')
+
+                    return code[-1]
+
+                elif line_number > 50:
+                    out = 'N/A'
+
+                    return out
+
+
+
+
 
 
 
