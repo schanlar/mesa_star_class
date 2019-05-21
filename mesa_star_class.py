@@ -102,8 +102,9 @@ class MESA_STAR(object):
 
 
     # Destructor
-    def __del__(self):
-        print('MESA_STAR Object has been destructed!')
+    def __del__(self, verbatim = False):
+        if verbatim:
+            print('MESA_STAR Object has been destructed!')
 
 
     # CLASS METHODS
