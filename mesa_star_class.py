@@ -4,6 +4,7 @@
 '''
 
 import numpy as np
+import math
 import mesa_reader as mr
 import os, re, glob, csv
 import logging
@@ -297,7 +298,11 @@ class MESA_STAR(object):
 
             return initial_mass, initial_metallicity, overshooting_factor, final_core_mass, final_envelope_mass
 
-        elif h.data('star_mass')[-1] == h.data('c_core_mass')[-1]:
+        # When the carbon core mass is equal to the total mass of the star, or
+        # when -due to MESA core definition- the carbon core mass is evaluated 
+        # to zero, we need manual investigation
+        elif h.data('star_mass')[-1] == h.data('c_core_mass')[-1] or \
+            math.isclose(h.data('c_core_mass')[-1], 0.0, abs_tol = 0.0):
 
             try:
                 p = self.getProfile()
