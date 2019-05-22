@@ -1,5 +1,5 @@
 '''
-@version: v.26.04.19
+@version: v.22.05.19
 @description: https://github.com/schanlar/mesa_star_class
 '''
 
@@ -288,7 +288,7 @@ class MESA_STAR(object):
             pass
 
 
-        if h.data('star_mass')[-1] != h.data('c_core_mass')[-1]:
+        if (h.data('star_mass')[-1] != h.data('c_core_mass')[-1]) and not (math.isclose(h.data('c_core_mass')[-1], 0.0, abs_tol = 0.0)):
 
             initial_mass = round(float(self.getMass()),1)
             initial_metallicity = float(self.getMetallicity())
