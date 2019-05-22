@@ -300,7 +300,7 @@ class MESA_STAR(object):
             return initial_mass, initial_metallicity, overshooting_factor, final_core_mass, final_envelope_mass
 
         # When the carbon core mass is equal to the total mass of the star, or
-        # when -due to MESA core definition- the carbon core mass is evaluated 
+        # when -due to MESA core definition- the carbon core mass is evaluated
         # to zero, we need manual investigation
         elif h.data('star_mass')[-1] == h.data('c_core_mass')[-1] or \
             math.isclose(h.data('c_core_mass')[-1], 0.0, abs_tol = 0.0):
@@ -737,7 +737,7 @@ class MESA_STAR(object):
 
 
     @staticmethod
-    def export_csvFile(zip_object, name = 'csvData'):
+    def export_csvFile(zip_object, name = 'csvData', termination=False):
 
         '''
         This static method takes a <zip object> as a mandatory argument,
@@ -746,21 +746,33 @@ class MESA_STAR(object):
         The header format follows the output of the <MESA_STAR.getCoreMass()>
         method.
 
+        If termination=True, the csv file will include another column that
+        will store the termination code for the stellar model.
+
         The default name of the output file is "csvData" and it can be changed
         using the optional  argument "name".
         '''
 
         # A simple header that follows the self.getCoreMass() method
-        header = ['#initial_mass', 'initial_metallicity', 'overshooting_factor', 'core_mass', 'envelope_mass']
+        if termination:
+            header = ['#initial_mass', 'initial_metallicity', 'overshooting_factor', 'core_mass', 'envelope_mass', 'termination_code']
+        else:
+            header = ['#initial_mass', 'initial_metallicity', 'overshooting_factor', 'core_mass', 'envelope_mass']
 
         # List that stores all data + header
         csvData = [header]
 
         # Unpack data
-        for a,b,c,d,e in zip_object:
+        if termination:
+            for a,b,c,d,e,f in zip_object:
 
-            data_row = [a,b,c,d,e]
-            csvData.append(data_row)
+                data_row = [a,b,c,d,e,f]
+                csvData.append(data_row)
+        else:
+            for a,b,c,d,e in zip_object:
+
+                data_row = [a,b,c,d,e]
+                csvData.append(data_row)
 
 
         # Create csv file
