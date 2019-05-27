@@ -14,6 +14,7 @@ from functools import wraps
 from file_read_backwards import FileReadBackwards as frb
 import matplotlib.pyplot as plt
 
+
 # The basic configuration for logging file
 # Uncomment this if you want to use the root logger
 # logging.basicConfig(filename='mesa_star.log', level=logging.INFO,
@@ -288,7 +289,8 @@ class MESA_STAR(object):
             pass
 
 
-        if (h.data('star_mass')[-1] != h.data('c_core_mass')[-1]) and not (math.isclose(h.data('c_core_mass')[-1], 0.0, abs_tol = 0.0)):
+        if (h.data('star_mass')[-1] != h.data('c_core_mass')[-1]) and not \
+            (math.isclose(h.data('c_core_mass')[-1], 0.0, abs_tol = 0.0)):
 
             initial_mass = round(float(self.getMass()),1)
             initial_metallicity = float(self.getMetallicity())
@@ -475,13 +477,15 @@ class MESA_STAR(object):
 
 
 
-    def _prepare_canvas(self):
+    def _prepare_canvas(self, fig_width = None, fig_height = None,
+                        columns = 1, fontsize = 8, revert = False):
         '''
         The basic canvas for plots
         '''
 
         # FIXME: Change canvas
 
+        '''
         plt.rcParams['figure.figsize'] = [15, 10]
         plt.rcParams['axes.linewidth'] = 2 #3
 
@@ -494,6 +498,49 @@ class MESA_STAR(object):
         for tick in ax.yaxis.get_major_ticks():
             tick.label1.set_fontsize(fontsize)
             tick.label1.set_fontweight('bold')
+        '''
+
+
+        ORIG_MATPLOTLIB_CONF = dict(plt.rcParams)
+
+        assert(columns in [1,2]), f'Columns: {columns} must be either 1 or 2'
+
+        if fig_width is None:
+            if columns == 2:
+                fig_width = 3.5
+            else:
+                fig_width = 7
+
+        if fig_height is None:
+            golden_mean = (np.sqrt(5.0) - 1.0) / 2.0    # Aesthetic ratio
+            fig_height = fig_width * golden_mean # height in inches
+
+        params = {'backend': 'ps',
+                  #'text.latex.preamble':
+                  #[ r'\usepackage{siunitx}',
+                  #   r'\usepackage[utf8]{inputenc}',
+                #    r'\usepackage[T1]{fontenc}',
+                #    r'\DeclareSIUnit \jansky {Jy}' ],
+                  'axes.labelsize' : fontsize,
+                  'axes.titlesize' : fontsize,
+                  'font.size': fontsize,
+                  'legend.fontsize' : fontsize,
+                  'xtick.labelsize' : fontsize,
+                  'ytick.labelsize' : fontsize,
+                  'axes.linewidth' : 1,
+                  'lines.linewidth' : 1,
+                  'text.usetex' : True,
+                  'figure.figsize' : [fig_width, fig_height],
+                  'font.family' : 'serif',
+                  'savefig.bbox' : 'tight',
+                  'savefig.dpi' : 300  # set to 600 for poster printing or PR
+                                      # figures
+        }
+
+        plt.rcParams.update(params)
+
+        if revert:
+            plt.rcParams.update(ORIG_MATPLOTLIB_CONF)
 
 
 
@@ -588,6 +635,7 @@ class MESA_STAR(object):
     def plotRhoT(self,
         xlim=None,
         ylim=None,
+        color = 'b',
         saveFigure=False,
         figureName='Rhoc_vs_Tc.pdf',
         plot_output_dir = plot_results_dir):
@@ -597,7 +645,8 @@ class MESA_STAR(object):
         diagram of a MESA_STAR object.
         '''
 
-        self._prepare_canvas()
+        self._prepare_canvas(fig_width = 15, fig_height = 10, columns = 2,
+                            fontsize = 10)
         self._burning_regions()
 
         try:
@@ -641,15 +690,15 @@ class MESA_STAR(object):
                     tag2 = labels[idx]
                     break
 
-        plt.plot(h.data('log_center_Rho'), h.data('log_center_T'), color = 'b', label = f'{tag1}, {tag2}')
+        plt.plot(h.data('log_center_Rho'), h.data('log_center_T'), color = color, label = f'{tag1}, {tag2}')
 
         legend = plt.legend(loc = 'upper left', prop = {'size':12}, bbox_to_anchor=(1, 1), shadow = False)
 
         #frame & labels
         xlabel = r'$\log (\rho_{\rm c} / {\rm gr}\,{\rm cm}^{-3})$'
         ylabel = r'$\log (T_{\rm c} / {\rm K})$'
-        plt.xlabel(xlabel, fontsize=23)
-        plt.ylabel(ylabel, fontsize=23)
+        plt.xlabel(xlabel, fontsize = 23)
+        plt.ylabel(ylabel, fontsize = 23)
 
         if xlim:
             plt.xlim(xlim)
@@ -662,10 +711,12 @@ class MESA_STAR(object):
 
 
         if saveFigure:
-            plt.savefig(os.path.join(plot_output_dir, figureName), bbox_inches = 'tight', dpi =300)
+            plt.savefig(os.path.join(plot_output_dir, figureName))
             plt.clf()
+
         else:
             plt.show()
+
 
 
     @__plot_decorator
