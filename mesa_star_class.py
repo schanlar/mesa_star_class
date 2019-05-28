@@ -1,5 +1,5 @@
 '''
-@version: v.22.05.19
+@version: v.28.05.19
 @description: https://github.com/schanlar/mesa_star_class
 '''
 
@@ -611,12 +611,12 @@ class MESA_STAR(object):
 
 
         # Weak reaction lines
-        plt.text(9.05, 7.52, r'$^{25}{\rm Mg}\leftrightarrow ^{25}{\rm Na}$', fontsize=15, rotation=90,verticalalignment='bottom')
-        plt.text(9.25, 7.52, r'$^{23}{\rm Na} \leftrightarrow ^{23}{\rm Ne}$', fontsize=15, rotation=90,verticalalignment='bottom')
-        plt.text(9.65, 7.52, r'$^{24}{\rm Mg}\rightarrow ^{24}{\rm Na}$', fontsize=15, rotation=90,verticalalignment='bottom')
-        plt.text(9.75, 7.52, r'$^{24}{\rm Na}\rightarrow ^{24}{\rm Ne}$', fontsize=15, rotation=90,verticalalignment='bottom')
-        plt.text(9.85, 7.52, r'$^{25}{\rm Na}\leftrightarrow ^{25}{\rm Ne}$', fontsize=15, rotation=90,verticalalignment='bottom')
-        plt.text(10.00, 7.52, r'$^{20}{\rm Ne}\rightarrow ^{20}{\rm F}\rightarrow  ^{20}{\rm O}$', fontsize=15, rotation=90,verticalalignment='bottom')
+        plt.text(9.05, 7.82, r'$^{25}{\rm Mg}\leftrightarrow ^{25}{\rm Na}$', fontsize=15, rotation=90,verticalalignment='bottom')
+        plt.text(9.25, 7.82, r'$^{23}{\rm Na} \leftrightarrow ^{23}{\rm Ne}$', fontsize=15, rotation=90,verticalalignment='bottom')
+        plt.text(9.65, 7.82, r'$^{24}{\rm Mg}\rightarrow ^{24}{\rm Na}$', fontsize=15, rotation=90,verticalalignment='bottom')
+        plt.text(9.75, 7.82, r'$^{24}{\rm Na}\rightarrow ^{24}{\rm Ne}$', fontsize=15, rotation=90,verticalalignment='bottom')
+        plt.text(9.85, 7.82, r'$^{25}{\rm Na}\leftrightarrow ^{25}{\rm Ne}$', fontsize=15, rotation=90,verticalalignment='bottom')
+        plt.text(10.00, 7.82, r'$^{20}{\rm Ne}\rightarrow ^{20}{\rm F}\rightarrow  ^{20}{\rm O}$', fontsize=15, rotation=90,verticalalignment='bottom')
 
 
         if ecap_density_corrections:
@@ -625,9 +625,9 @@ class MESA_STAR(object):
             rho_ce = self._capture_density(t,10**9.96,7.025*u.MeV,t_comp,10**9.801*u.s)
             plt.plot(np.log10(rho_ce),np.log10(t.value),color='red',ls='--')
         else:
-            plt.axvline(x=9.96,color='red',ls='-')
+            plt.axvline(x=9.96,color='tab:red',ls='-')
 
-        plt.text(10.0, 8.3, r'$e^{-}$cSN', fontsize=15, rotation=90,color='red',verticalalignment='bottom')
+        plt.text(10.0, 8.4, r'$e^{-}$cSN', fontsize=15, rotation=90,color='red',verticalalignment='bottom')
 
 
 
@@ -637,6 +637,7 @@ class MESA_STAR(object):
         ylim=None,
         color = 'b',
         saveFigure=False,
+        overplot = False,
         figureName='Rhoc_vs_Tc.pdf',
         plot_output_dir = plot_results_dir):
 
@@ -644,6 +645,9 @@ class MESA_STAR(object):
         It plots the (log) central density vs (log) central temperature
         diagram of a MESA_STAR object.
         '''
+
+        assert(type(xlim) == list or xlim is None), 'xlim must be either a list or NoneType'
+        assert(type(ylim) == list or ylim is None), 'ylim must be either a list or NoneType'
 
         self._prepare_canvas(fig_width = 15, fig_height = 10, columns = 2,
                             fontsize = 10)
@@ -664,8 +668,11 @@ class MESA_STAR(object):
             logger.info('History file loaded succesfully!')
 
 
-        labels = ['LM;WNO', 'LM;WO1', 'LM;WO2', 'IM;WNO', 'IM;WO1', 'IM;WO2', 'SM;WNO', 'SM;WO1', 'SM;WO2']
+        #labels = ['LM;WNO', 'LM;WO1', 'LM;WO2', 'IM;WNO', 'IM;WO1', 'IM;WO2', 'SM;WNO', 'SM;WO1', 'SM;WO2']
+        labels = [r'$Z = 0.0001;f = 0.0$', r'$Z = 0.0001;f = 0.014$', r'$Z = 0.0001;f = 0.016$', r'$Z = 0.001;f = 0.0$', r'$Z = 0.001;f = 0.014$', r'$Z = 0.001;f = 0.016$', 
+                r'$Z = 0.02;f = 0.0$', r'$Z = 0.02;f = 0.014$', r'$Z = 0.02;f = 0.016$']
         labels_coord = ['00', '01', '02', '10', '11', '12', '20', '21', '22']
+        #colors = iter(['blue', 'green', 'magenta', 'orange', 'red', 'brown', 'cyan', 'purple', 'black', 'yellow'])
 
         metallicity_values = ['0.0001', '0.0010', '0.0200']
         overshoot_values = ['0.0000', '0.0140', '0.0160']
@@ -692,7 +699,7 @@ class MESA_STAR(object):
 
         plt.plot(h.data('log_center_Rho'), h.data('log_center_T'), color = color, label = f'{tag1}, {tag2}')
 
-        legend = plt.legend(loc = 'upper left', prop = {'size':12}, bbox_to_anchor=(1, 1), shadow = False)
+        legend = plt.legend(loc = 'upper left', prop = {'size':12}, bbox_to_anchor=(1, 1), shadow = True)
 
         #frame & labels
         xlabel = r'$\log (\rho_{\rm c} / {\rm gr}\,{\rm cm}^{-3})$'
@@ -710,10 +717,12 @@ class MESA_STAR(object):
             plt.ylim([7.5,10.0])
 
 
-        if saveFigure:
+        if saveFigure and overplot:
+            plt.savefig(os.path.join(plot_output_dir, figureName))
+            
+        elif saveFigure and not overplot:
             plt.savefig(os.path.join(plot_output_dir, figureName))
             plt.clf()
-
         else:
             plt.show()
 
@@ -741,7 +750,7 @@ class MESA_STAR(object):
 
             plt.plot(p.data('mass'), p.data('ye'), c = colour)
             plt.savefig(f'{figureName}', bbox_inches = 'tight', dpi = 300)
-            plt.clf()
+            #plt.clf()
         else:
 
             plt.plot(p.data('mass'), p.data('ye'), c = colour)
