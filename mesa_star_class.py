@@ -476,6 +476,7 @@ class MESA_STAR(object):
         return wrapper
 
 
+    ORIG_MATPLOTLIB_CONF = dict(plt.rcParams) # Store original settings
 
     def _prepare_canvas(self, fig_width = None, fig_height = None,
                         columns = 1, fontsize = 8, revert = False):
@@ -485,23 +486,6 @@ class MESA_STAR(object):
 
         # FIXME: Change canvas
 
-        '''
-        plt.rcParams['figure.figsize'] = [15, 10]
-        plt.rcParams['axes.linewidth'] = 2 #3
-
-        fontsize = 15 #20
-        ax = plt.gca()
-        ax.tick_params(direction='in',length=5)
-        for tick in ax.xaxis.get_major_ticks():
-            tick.label1.set_fontsize(fontsize)
-            tick.label1.set_fontweight('bold')
-        for tick in ax.yaxis.get_major_ticks():
-            tick.label1.set_fontsize(fontsize)
-            tick.label1.set_fontweight('bold')
-        '''
-
-
-        ORIG_MATPLOTLIB_CONF = dict(plt.rcParams)
 
         assert(columns in [1,2]), f'Columns: {columns} must be either 1 or 2'
 
@@ -515,19 +499,27 @@ class MESA_STAR(object):
             golden_mean = (np.sqrt(5.0) - 1.0) / 2.0    # Aesthetic ratio
             fig_height = fig_width * golden_mean # height in inches
 
-        params = {'backend': 'ps',
+        params = {'backend': 'pdf',
                   #'text.latex.preamble':
                   #[ r'\usepackage{siunitx}',
-                  #   r'\usepackage[utf8]{inputenc}',
-                #    r'\usepackage[T1]{fontenc}',
-                #    r'\DeclareSIUnit \jansky {Jy}' ],
+                  #  r'\usepackage[utf8]{inputenc}',
+                  #  r'\usepackage[T1]{fontenc}',
+                  #  r'\DeclareSIUnit \jansky {Jy}' ],
                   'axes.labelsize' : fontsize,
                   'axes.titlesize' : fontsize,
                   'font.size': fontsize,
                   'legend.fontsize' : fontsize,
                   'xtick.labelsize' : fontsize,
                   'ytick.labelsize' : fontsize,
-                  'axes.linewidth' : 1,
+                  #'xtick.major.size' : 18,
+                  #'xtick.minor.size' : 9,
+                  #'ytick.major.size' : 18,
+                  #'ytick.minor.size' : 9,
+                  #'xtick.major.width' : 0.8,
+                  #'xtick.minor.width' : 0.6,
+                  #'ytick.major.width' : 0.8,
+                  #'ytick.minor.width' : 0.6,
+                  'axes.linewidth' : 2,
                   'lines.linewidth' : 1,
                   'text.usetex' : True,
                   'figure.figsize' : [fig_width, fig_height],
@@ -539,8 +531,11 @@ class MESA_STAR(object):
 
         plt.rcParams.update(params)
 
+        
+
         if revert:
-            plt.rcParams.update(ORIG_MATPLOTLIB_CONF)
+            plt.rcParams.update(ORIG_MATPLOTLIB_CONF) # Call global configuration
+                                                      # for plots
 
 
 
@@ -605,18 +600,31 @@ class MESA_STAR(object):
 
         plt.plot(logrho,logt,ls='--',color='black')
 
-        plt.text(7.0, 9.5, r'$\epsilon_{\rm F}/k T \simeq 4$', fontsize=22, rotation=0, rotation_mode='anchor')
+        plt.text(7.0, 9.5, r'$\epsilon_{\rm F}/k T \simeq 4$', 
+            fontsize=22, rotation=0, rotation_mode='anchor')
 
-        plt.text(5.12, 9.5, r'$P_{\rm rad}\simeq P_{\rm gas}$', fontsize=22, rotation=0, rotation_mode='anchor')
+        plt.text(5.12, 9.5, r'$P_{\rm rad}\simeq P_{\rm gas}$', 
+            fontsize=22, rotation=0, rotation_mode='anchor')
 
 
         # Weak reaction lines
-        plt.text(9.05, 7.82, r'$^{25}{\rm Mg}\leftrightarrow ^{25}{\rm Na}$', fontsize=15, rotation=90,verticalalignment='bottom')
-        plt.text(9.25, 7.82, r'$^{23}{\rm Na} \leftrightarrow ^{23}{\rm Ne}$', fontsize=15, rotation=90,verticalalignment='bottom')
-        plt.text(9.65, 7.82, r'$^{24}{\rm Mg}\rightarrow ^{24}{\rm Na}$', fontsize=15, rotation=90,verticalalignment='bottom')
-        plt.text(9.75, 7.82, r'$^{24}{\rm Na}\rightarrow ^{24}{\rm Ne}$', fontsize=15, rotation=90,verticalalignment='bottom')
-        plt.text(9.85, 7.82, r'$^{25}{\rm Na}\leftrightarrow ^{25}{\rm Ne}$', fontsize=15, rotation=90,verticalalignment='bottom')
-        plt.text(10.00, 7.82, r'$^{20}{\rm Ne}\rightarrow ^{20}{\rm F}\rightarrow  ^{20}{\rm O}$', fontsize=15, rotation=90,verticalalignment='bottom')
+        plt.text(9.05, 7.82, r'$^{25}{\rm Mg}\leftrightarrow ^{25}{\rm Na}$', 
+            fontsize=15, rotation=90,verticalalignment='bottom')
+
+        plt.text(9.25, 7.82, r'$^{23}{\rm Na} \leftrightarrow ^{23}{\rm Ne}$', 
+            fontsize=15, rotation=90,verticalalignment='bottom'
+)
+        plt.text(9.65, 7.82, r'$^{24}{\rm Mg}\rightarrow ^{24}{\rm Na}$', 
+            fontsize=15, rotation=90,verticalalignment='bottom')
+
+        plt.text(9.75, 7.82, r'$^{24}{\rm Na}\rightarrow ^{24}{\rm Ne}$', 
+            fontsize=15, rotation=90,verticalalignment='bottom')
+
+        plt.text(9.85, 7.82, r'$^{25}{\rm Na}\leftrightarrow ^{25}{\rm Ne}$', 
+            fontsize=15, rotation=90,verticalalignment='bottom')
+
+        plt.text(10.00, 7.82, r'$^{20}{\rm Ne}\rightarrow ^{20}{\rm F}\rightarrow  ^{20}{\rm O}$', 
+            fontsize=15, rotation=90,verticalalignment='bottom')
 
 
         if ecap_density_corrections:
@@ -627,7 +635,7 @@ class MESA_STAR(object):
         else:
             plt.axvline(x=9.96,color='tab:red',ls='-')
 
-        plt.text(10.0, 8.4, r'$e^{-}$cSN', fontsize=15, rotation=90,color='red',verticalalignment='bottom')
+        plt.text(10.0, 8.4, r'$e^{-}$cSN', fontsize=25, rotation=90,color='red',verticalalignment='bottom')
 
 
 
@@ -649,8 +657,8 @@ class MESA_STAR(object):
         assert(type(xlim) == list or xlim is None), 'xlim must be either a list or NoneType'
         assert(type(ylim) == list or ylim is None), 'ylim must be either a list or NoneType'
 
-        self._prepare_canvas(fig_width = 15, fig_height = 10, columns = 2,
-                            fontsize = 10)
+        self._prepare_canvas(fig_width = 15, columns = 2,
+                            fontsize = 20)
         self._burning_regions()
 
         try:
@@ -669,8 +677,10 @@ class MESA_STAR(object):
 
 
         #labels = ['LM;WNO', 'LM;WO1', 'LM;WO2', 'IM;WNO', 'IM;WO1', 'IM;WO2', 'SM;WNO', 'SM;WO1', 'SM;WO2']
-        labels = [r'$Z = 0.0001;f = 0.0$', r'$Z = 0.0001;f = 0.014$', r'$Z = 0.0001;f = 0.016$', r'$Z = 0.001;f = 0.0$', r'$Z = 0.001;f = 0.014$', r'$Z = 0.001;f = 0.016$', 
-                r'$Z = 0.02;f = 0.0$', r'$Z = 0.02;f = 0.014$', r'$Z = 0.02;f = 0.016$']
+        labels = [r'$Z = 0.0001;f = 0.0$', r'$Z = 0.0001;f = 0.014$', r'$Z = 0.0001;f = 0.016$', 
+            r'$Z = 0.001;f = 0.0$', r'$Z = 0.001;f = 0.014$', r'$Z = 0.001;f = 0.016$', r'$Z = 0.02;f = 0.0$', 
+            r'$Z = 0.02;f = 0.014$', r'$Z = 0.02;f = 0.016$']
+
         labels_coord = ['00', '01', '02', '10', '11', '12', '20', '21', '22']
         #colors = iter(['blue', 'green', 'magenta', 'orange', 'red', 'brown', 'cyan', 'purple', 'black', 'yellow'])
 
@@ -699,13 +709,13 @@ class MESA_STAR(object):
 
         plt.plot(h.data('log_center_Rho'), h.data('log_center_T'), color = color, label = f'{tag1}, {tag2}')
 
-        legend = plt.legend(loc = 'upper left', prop = {'size':12}, bbox_to_anchor=(1, 1), shadow = True)
+        legend = plt.legend(loc = 'upper left', bbox_to_anchor=(1, 1), shadow = True)
 
         #frame & labels
         xlabel = r'$\log (\rho_{\rm c} / {\rm gr}\,{\rm cm}^{-3})$'
         ylabel = r'$\log (T_{\rm c} / {\rm K})$'
-        plt.xlabel(xlabel, fontsize = 23)
-        plt.ylabel(ylabel, fontsize = 23)
+        plt.xlabel(xlabel)
+        plt.ylabel(ylabel)
 
         if xlim:
             plt.xlim(xlim)
@@ -734,6 +744,8 @@ class MESA_STAR(object):
                              plot_dir = '',
                              colour = 'blue',
                              figureName = 'mass_vs_ye.pdf'):
+
+        self._prepare_canvas(fig_width = 10, fontsize = 18, columns = 2)
 
         info = self.getName()
         try:
@@ -815,9 +827,11 @@ class MESA_STAR(object):
 
         # A simple header that follows the self.getCoreMass() method
         if termination:
-            header = ['#initial_mass', 'initial_metallicity', 'overshooting_factor', 'core_mass', 'envelope_mass', 'termination_code']
+            header = ['#initial_mass', 'initial_metallicity', 'overshooting_factor', 
+                'core_mass', 'envelope_mass', 'termination_code']
         else:
-            header = ['#initial_mass', 'initial_metallicity', 'overshooting_factor', 'core_mass', 'envelope_mass']
+            header = ['#initial_mass', 'initial_metallicity', 'overshooting_factor', 
+                'core_mass', 'envelope_mass']
 
         # List that stores all data + header
         csvData = [header]
