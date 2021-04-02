@@ -322,11 +322,29 @@ class MESA_STAR(object):
                 initial_mass = round(float(self.getMass()),1)
                 initial_metallicity = float(self.getMetallicity())
                 overshooting_factor = float(self.getOvershoot())
-
-                mask = 0.80 * max(p.data('logP'))
+                
                 logP = p.data('logP')
                 logR = p.data('logR')
-                core_boundary = p.data('mass')[np.where(logP < mask)][-1]
+                
+                # Degeneracy pressure
+                Pdeg = (10**p.data('logP') - p.data('Pgas'))
+                P_ratio = (p.data('Pgas') / Pdeg)
+                
+                # Find the index where P_ratio is close to unity, i.e.
+                # the location where the contribution in pressure from the ideal gas
+                # can no longer be neglected
+                foundCoreMassWithPratio = False
+                for i in range(len(P_ratio)):
+                    if math.isclose(P_ratio[i], 1.0, abs_tol=0.05):
+                        core_boundary = p.data('mass')[i]
+                        foundCoreMassWithPratio = True
+
+                if foundCoreMassWithPratio:
+                    print('Core mass estimated with Pratio')
+                else:
+                    mask = 0.80 * max(p.data('logP'))
+                    core_boundary = p.data('mass')[np.where(logP < mask)][-1]
+                    print('Core mass estimated with the pressure profile')
 
                 print(f'Final core mass estimate: {round(core_boundary,3)} Msol')
 
