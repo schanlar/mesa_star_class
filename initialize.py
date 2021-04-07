@@ -4,23 +4,21 @@ from os import fdopen, remove
 import os, sys
 
 
-
 def replace(pattern, subst):
 
     cwd = os.getcwd()
-    file_path = os.path.join(cwd, 'mesa_star_class.py')
+    file_path = os.path.join(cwd, "mesa_star_class.py")
 
-    #Create temp file
+    # Create temp file
     fh, abs_path = mkstemp()
-    with fdopen(fh,'w') as new_file:
+    with fdopen(fh, "w") as new_file:
         with open(file_path) as old_file:
             for line in old_file:
                 new_file.write(line.replace(pattern, subst))
-    #Remove original file
+    # Remove original file
     remove(file_path)
-    #Move new file
+    # Move new file
     move(abs_path, file_path)
-
 
 
 def main():
@@ -34,12 +32,12 @@ def main():
     subst_mesa = f"mesa_dir = {repr(subst_mesa_dir)}"
     subst_plots = f"plot_results_dir = {repr(subst_plots_dir)}"
 
-    print('Setting paths...')
+    print("Setting paths...")
     replace(pattern_mesa, subst_mesa)
     replace(pattern_plots, subst_plots)
-    print('All done!')
-    print('*'*30)
+    print("All done!")
+    print("*" * 30)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
