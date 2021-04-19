@@ -735,7 +735,11 @@ class MESA_STAR(object):
             rho_ce = self._capture_density(
                 t, 10 ** 9.96, 7.025 * u.MeV, t_comp, 10 ** 9.801 * u.s
             )
-            plt.plot(np.log10(rho_ce), np.log10(t.value), color="red", ls="--")
+           # plt.plot(np.log10(rho_ce), np.log10(t.value), color="red", ls="--")
+            plt.fill_between(np.log10(rho_ce),np.log10(t.value),np.max(np.log10(t.value))  ,facecolor="none", hatch="....", edgecolor="gray", linewidth=0.0)
+            plt.fill_between([9.96,13],0,15,facecolor="none", hatch="....", edgecolor="gray", linewidth=0.0)
+            plt.text(10.2, 8.25, r'ECSNe', 
+                {'color': 'black', 'ha': 'center', 'va': 'center','fontsize': 20,'bbox': dict(boxstyle="round", fc="w", ec="k", pad=0.2)})
         else:
             plt.axvline(x=9.96, color="tab:red", ls="-")
 
